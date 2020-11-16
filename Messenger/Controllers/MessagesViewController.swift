@@ -15,6 +15,8 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
     var messageList:[MessageModel] = []
     var messagesRead: Bool = false
     
+    var messageDict: [[String:String]] = [[:]]
+    
     //Database
     var ref = Database.database().reference()
 
@@ -59,19 +61,19 @@ extension MessagesViewController {
     //Database stuff
     
     func listenForNewMessage() {
-        var myCount: Int = 0
-        
         let messRef = ref.child("messages")
         messRef.observe(.value, with: {  snapshot in
             
             let enumerator = snapshot.children
             while let rest = enumerator.nextObject() as? DataSnapshot {
-                print("\(myCount): \(rest.value!)")
-                myCount += 1
+//                print("\(myCount): \(rest.value!)")
+//                myCount += 1
+                self.messageDict.append((rest.value! as? [String: String])!)
             }
+            print(self.messageDict)
+            print("Number of indexes: \(self.messageDict.count)")
         })
-        print(messageList)
-        print("Number of indexes: \(messageList.count)")
+        
     }
 }
 //snapshot.children
