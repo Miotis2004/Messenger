@@ -17,7 +17,8 @@ class StartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        emailTextField.text = "bob@email.com"
+        passwordTextField.text = "Password"
     }
     
     @IBAction func loginButtonTap(_ sender: UIButton) {

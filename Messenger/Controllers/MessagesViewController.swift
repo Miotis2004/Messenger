@@ -47,7 +47,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath) as! MessageCell
         
         
-        cell.messageLabel.text = messageList[indexPath.row].message
+        cell.messageLabel.text = "Message goes here"
         return cell
     }
     
@@ -59,22 +59,19 @@ extension MessagesViewController {
     //Database stuff
     
     func listenForNewMessage() {
-        let messRef = ref.child("messages")
+        var myCount: Int = 0
         
-        messRef.observe(.value, with: { [self]snapshot in
-            guard let value = snapshot.value as? [String: Any] else {return}
-            guard let userReceiving = value["userReceiving"] as? String,
-                  let userSending = value["userSending"] as? String,
-                  let message = value["message"] as? String
-            else {return}
+        let messRef = ref.child("messages")
+        messRef.observe(.value, with: {  snapshot in
             
-            let newMessage = MessageModel(userSending: userSending, userReceiving: userReceiving, message: message)
-            
-            print("New Message: \(newMessage)")
-            
-            messageList.append(newMessage)
+            let enumerator = snapshot.children
+            while let rest = enumerator.nextObject() as? DataSnapshot {
+                print("\(myCount): \(rest.value!)")
+                myCount += 1
+            }
         })
         print(messageList)
         print("Number of indexes: \(messageList.count)")
     }
 }
+//snapshot.children
